@@ -1,0 +1,131 @@
+.MODEL SMALL
+.STACK 100h
+
+.DATA
+   
+    
+    DB '=======================================$'
+    inputNama DB 'Masukkan nama: $'
+    inputNpm DB 'Masukkan NIM: $'
+    inputNilai1 DB 'Masukkan nilai semester 1: $'
+    inputNilai2 DB 'Masukkan nilai semester 2: $'
+    inputNilai3 DB 'Masukkan nilai semester 3: $'
+    inputNilai4 DB 'Masukkan nilai semester 4: $'
+    DB '=======================================$'
+    totalNilai DB 'Total nilai: $'
+    rataRataNilai DB 'Rata-rata nilai: $'
+
+.CODE
+MAIN PROC
+    ; Mulai program
+    mov ax, @DATA
+    mov ds, ax
+
+    ; Input nama
+    mov ah, 09h
+    lea dx, inputNama
+    int 21h
+
+    mov ah, 0Ah
+    lea dx, nama
+    int 21h
+
+    ; Input nim
+    mov ah, 09h
+    lea dx, inputNim
+    int 21h
+
+    mov ah, 0Ah
+    lea dx, npm
+    int 21h
+
+  ; input nilai semester 1
+    mov ax, 4
+    mov bx, 1
+    mov cx, nilai1_prompt
+    mov dx, nilai1_prompt_len
+    int 21h
+
+    mov ax, 3
+    mov bx, 0
+    lea cx, [nilai1]
+    mov dx, 4
+    int 21h
+
+    ; input nilai semester 2
+    mov ax, 4
+    mov bx, 1
+    mov cx, nilai2_prompt
+    mov dx, nilai2_prompt_len
+    int 21h
+
+    mov ax, 3
+    mov bx, 0
+    lea cx, [nilai2]
+    mov dx, 4
+    int 21h
+
+    ; input nilai semester 3
+    mov ax, 4
+    mov bx, 1
+    mov cx, nilai3_prompt
+    mov dx, nilai3_prompt_len
+    int 21h
+
+    mov ax, 3
+    mov bx, 0
+    lea cx, [nilai3]
+    mov dx, 4
+    int 21h
+
+    ; input nilai semester 4
+    mov ax, 4
+    mov bx, 1
+    mov cx, nilai4_prompt
+    mov dx, nilai4_prompt_len
+    int 21h
+
+    mov ax, 3
+    mov bx, 0
+    lea cx, [nilai4]
+    mov dx, 4
+    int 21h
+
+    ; Menghitung total nilai
+    fldz
+    mov si, 1
+L1:
+    fld nilai[si*TYPE REAL]
+    fadd total
+    fstp total
+    inc si
+    cmp si, 5
+    jne L1
+
+    ; Menghitung rata-rata nilai
+    ;Hitung total
+    mov ax, dword [nilai1]
+    add ax, dword [nilai2]
+    add ax, dword [nilai3]
+    add ax, dword [nilai4]
+    mov [total], ax
+    mov ax, dword [total]
+    mov bx, 4
+    int21h
+    
+    
+
+    ; Output rata-rata
+    mov ax, 4
+    mov bx, 1
+    mov cx, rata_rata
+    mov dx, 4
+    int 21h
+
+   
+    ; Selesai program
+    mov ah, 4Ch
+    int 21h
+
+MAIN ENDP
+END MAIN
